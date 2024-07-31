@@ -1,0 +1,44 @@
+name: CI to Docker hub 
+
+on:
+  push:
+    branches:
+      - 'main'
+  
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Build Docker image
+        run: |
+          git clone https://github.com/dockersamples/example-voting-app.git
+          cd example-voting-app
+          cd vote
+          docker build -t sleevasrujana1/testing2:vote .
+      -
+        name: Scan Image
+        id: scan
+        uses: sysdiglabs/scan-action@v5
+        with: 
+            image-tag: sleevasrujana1/testing2:vote
+            sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+            
+        - name: Upload SARIF file
+        if: success() || failure()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ github.workspace }}/sarif.json    
