@@ -29,16 +29,7 @@ jobs:
           cd example-voting-app
           cd vote
           docker build -t sleevasrujana1/testing2:vote .
-          
-      - name: Scan Image
-        id: scan
-        uses: sysdiglabs/scan-action@v5
-        with: 
-            image-tag: sleevasrujana1/testing2:vote
-            sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-            
-        - name: Upload SARIF file
-        if: success() || failure()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: ${{ github.workspace }}/sarif.json    
+          curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/darwin/arm64/sysdig-cli-scanner"
+          shasum -a 256 -c <(curl -sL "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/darwin/arm64/sysdig-cli-scanner.sha256")
+          chmod +x ./sysdig-cli-scanner
+          SECURE_API_TOKEN=4f3aa032-5e9d-4581-b4b6-4b3ad0c894a3 ./sysdig-cli-scanner --apiurl https://app.us4.sysdig.com/secure/ sleevasrujana1/testing2:vote
