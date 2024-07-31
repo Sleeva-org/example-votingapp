@@ -1,4 +1,5 @@
 # Define a base stage that uses the official python runtime base image
+# TestingIaC Scanning.
 FROM python:3.11-slim AS base
 
 # Add curl for healthcheck
