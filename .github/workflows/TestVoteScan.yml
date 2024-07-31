@@ -29,7 +29,7 @@ jobs:
           cd example-voting-app
           cd vote
           docker build -t sleevasrujana1/testing2:vote .
-      -
+  ImageScan:
         name: Scan Image
         id: scan
         uses: sysdiglabs/scan-action@v5
