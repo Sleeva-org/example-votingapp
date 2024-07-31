@@ -24,4 +24,5 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - 
         name: Build Docker image
-        run: docker build --file example-votingapp/result/Dockerfile --tag sleevasrujana1/testing2:result
+        working-directory: example-votingapp/result
+        run: docker build -t sleevasrujana1/testing2:result
